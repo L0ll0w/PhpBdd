@@ -14,10 +14,13 @@
         <h1 class="logo">Espace Admin</h1>
         <nav>
             <ul>
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li><a href="{{ route('schedules') }}">Voir les créneaux</a></li>
-                <li><a href="{{ route('appointments.showAvailableAppointments') }}">Voir les rendez-vous</a></li>
-                <li><a href="{{ route('logout') }}">Déconnexion</a></li>
+                <li><a href="{{ route('welcome') }}">Accueil</a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn">Se déconnecter</button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </div>

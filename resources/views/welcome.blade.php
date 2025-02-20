@@ -21,7 +21,11 @@
                 <li><a href="#contact">Contact</a></li>
                 @if (Route::has('login'))
                     @auth
-                        <li><a href="{{ url('/dashboard') }}" class="btn">Dashboard</a></li>
+                        @if (Auth::user()->isAdmin())
+                            <li><a href="{{ url('/admin') }}" class="btn">Espace Admin</a></li>
+                        @else
+                            <li><a href="{{ url('/schedules') }}" class="btn">Mes Rendez-vous</a></li>
+                        @endif
                     @else
                         <li><a href="{{ route('login') }}" class="btn">Se connecter</a></li>
                         @if (Route::has('register'))
@@ -29,6 +33,7 @@
                         @endif
                     @endauth
                 @endif
+
             </ul>
         </nav>
     </div>

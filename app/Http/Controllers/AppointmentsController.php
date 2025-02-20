@@ -62,14 +62,26 @@ class AppointmentsController extends Controller
         $request->validate([
             'date' => 'required|date',
             'time' => 'required',
+            'description' => 'required|string|max:255',
         ]);
 
-        $appointment = new Appointments();
-        $appointment->user_id = auth()->id();
-        $appointment->date = $request->date;
-        $appointment->time = $request->time;
-        $appointment->save();
+        // Vérifier si le créneau est déjà réservé
+        $existingAppointment = Appointments::where('date', $request->date)
+            ->where('time', $request->time)
+            ->first();
 
-        return redirect()->back()->with('success', 'Rendez-vous réservé avec succès !');
+        if ($existingAppointment) {
+            return back()->with('error', 'Ce créneau est déjà réservé.');
+        }
+
+        // Enregistrement du rendez-vous avec description
+        Appointments::create([
+            'user_id' => auth()->id(),
+            'date' => $request->date,
+            'time' => $request->time,
+            'details' => $request->description,
+        ]);
+
+        return back()->with('success', 'Votre rendez-vous a bien été réservé.');
     }
 }

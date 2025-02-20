@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\AppointmentsController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,8 +13,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/'); // Redirige vers la page d'accueil après la déconnexion
+})->name('logout');
+
+
 // Tableau de bord utilisateur
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 
 // Routes pour les rôles
 Route::get('/admin', [RoleController::class, 'admin'])->name('admin');
