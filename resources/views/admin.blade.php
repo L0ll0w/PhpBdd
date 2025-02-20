@@ -19,13 +19,14 @@
                         <td>{{ $appointment->user->name ?? 'Inconnu' }}</td>
                         <td>{{ $appointment->time }}</td>
                         <td>{{ $appointment->details }}</td>
-                        {{--<td>
-                        <form action="{{ route('admin.rdv.delete', $appoitment->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                        </form>
-                        </td>--}}
+                        <td>
+                            <form action="{{ route('admin.rdv.delete', $appointment->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
                         </tr>
                 @endforeach
             </tbody>

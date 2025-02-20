@@ -18,4 +18,14 @@ class AdminController extends Controller{
         $this->authorize('viewAny', Appointments::class);
         return view('admin', ['appointments' => Appointments::all()]);
     }
+
+    public function deleteAppointment($id){
+        $appointments = Appointments::find($id);
+        if (!$appointments) {
+            return redirect()->route('admin');
+        }
+        $this->authorize('delete', $appointments);
+        $appointments->delete();
+        return redirect()->route('admin');
+    }
 }

@@ -13,8 +13,9 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/client', [\App\Http\Controllers\RoleController::class, 'client'])->name('client');
 Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-Route::get('appointment/view/{appointment}', [AdminController::class, 'show'])
-    ->name('appointment.show');
+Route::get('appointment/view/{appointment}', [AdminController::class, 'show'])->name('appointment.show');
+Route::delete('/admin/rdv/{id}', [AdminController::class, 'deleteAppointment'])->name('admin.rdv.delete');
+
 
 
 
