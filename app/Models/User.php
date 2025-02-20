@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Ajout du champ "role"
     ];
 
     /**
@@ -44,16 +45,16 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the appointments for the user.
+     * Relation avec les rendez-vous
      */
     public function appointments(): HasMany
     {
+        //essayer appointment avec "s" si bug
         return $this->hasMany(Appointment::class);
     }
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return $this->role === 'admin'; // Vérifie le champ "role"
     }
-
 }

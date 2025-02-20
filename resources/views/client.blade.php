@@ -9,5 +9,6 @@
 
 <body>
     <h1>Bienvenue Client</h1>
+    <a href="{{ route('schedules') }}">Voir les horaires</a>
 </body>
 </html>
