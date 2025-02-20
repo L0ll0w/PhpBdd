@@ -20,11 +20,11 @@
                         <td>{{ $appointment->time }}</td>
                         <td>{{ $appointment->details }}</td>
                         <td>
-                            <form action="{{ route('admin.rdv.delete', $appointment->id) }}" method="POST">
+                            <form id="delete-form-{{ $appointment->id }}" action="{{ route('admin.rdv.delete', $appointment->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
 
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                                <button type="submit" class="btn btn-danger" data-id="{{ $appointment->id }}">Supprimer</button>
                             </form>
                         </td>
                         </tr>
@@ -32,4 +32,9 @@
             </tbody>
         </table>
     </div>
+@endsection
+
+@section('scripts')
+    <script>console.log('Script chargé !');</script>
+    <script src="{{ asset('js/confirmation.js') }}"></script>
 @endsection
