@@ -6,9 +6,9 @@
         <title>Confirmation de rendez-vous</title>
     </head>
     <body>
-        <h1>Bonjour {{ $rdv->patient_name }},</h1>
+        <h1>Bonjour</h1>
         <p>Votre rendez-vous a bien été pris en compte.</p>
-        <p><strong>Date :</strong> {{ $rdv->date->format('d/m/Y H:i') }}</p>
+        <p><strong>Date :</strong> {{ $rdv->date_time->format('d/m/Y H:i') }}</p>
         <p>Merci de votre confiance.</p>
         <p>Cabinet de Kinésithérapeute</p>
     </body>

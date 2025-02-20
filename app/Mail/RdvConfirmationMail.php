@@ -25,8 +25,9 @@ class RdvConfirmationMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Confirmation de votre rendez-vous')
-            ->view('emails.confirmation-rdv');
+        return $this->from('test918237465@gmail.com')
+            ->subject('Confirmation de votre rendez-vous')
+            ->view('emails.rdv_confirmation');
     }
 
     /**
@@ -35,8 +36,8 @@ class RdvConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmation Rdv Mail',
-        );
+            from: new Adress('test918237465@gmail.com', 'Test'),
+            subject: 'Confirmation de votre rendez-vous');
     }
 
     /**
