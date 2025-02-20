@@ -29,3 +29,6 @@ Route::get('/appointments', [AppointmentsController::class, 'showAvailableAppoin
 Route::post('/appointments/book', [AppointmentsController::class, 'bookAppointment'])
     ->name('appointments.book')
     ->middleware('auth'); // Réservation sécurisée (authentification requise)
+
+Route::post('/admin/schedules/store', [SchedulesController::class, 'store'])
+    ->name('admin.schedules.store');

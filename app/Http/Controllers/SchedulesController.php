@@ -1,63 +1,98 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Appointments;
-use App\Models\Schedules;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use App\Models\Schedules;
+use Carbon\Carbon;
 
 class SchedulesController extends Controller
 {
-    public function schedules()
+    public function index()
     {
-        $currentMonth = now()->month;
-        $currentYear = now()->year;
+        // Récupère tous les rendez-vous triés par date de début
+        $schedules = Schedules::orderBy('start_date_time')->get();
 
-        // Génération des créneaux horaires
-        $availableSlots = $this->generateSchedule($currentMonth, $currentYear);
-
-        return view('schedules', compact('currentMonth', 'currentYear', 'availableSlots'));
-    }
-
-    private function generateSchedule($month, $year)
-    {
-        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+        // Générer un tableau pour stocker les créneaux par date
         $availableSlots = [];
 
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $date = Carbon::create($year, $month, $day);
-            $slots = [];
+        foreach ($schedules as $schedule) {
+            $date = Carbon::parse($schedule->start_date_time)->format('Y-m-d');
+            $startTime = Carbon::parse($schedule->start_date_time)->format('H:i');
+            $endTime = Carbon::parse($schedule->end_date_time)->format('H:i');
 
-            // Créneaux matin (9h-12h)
-            for ($hour = 9; $hour < 12; $hour++) {
-                $slots[] = $this->createSlot($date, $hour);
+            // Initialisation de la date dans le tableau si elle n'existe pas encore
+            if (!isset($availableSlots[$date])) {
+                $availableSlots[$date] = [];
             }
 
-            // Créneaux après-midi (13h-18h)
-            for ($hour = 13; $hour < 18; $hour++) {
-                $slots[] = $this->createSlot($date, $hour);
-            }
-
-            $availableSlots[$date->format('Y-m-d')] = $slots;
+            $availableSlots[$date][] = [
+                'start' => $startTime,
+                'end' => $endTime,
+                'booked' => false, // Mettre à jour cette valeur si un système de réservation est ajouté
+            ];
         }
 
-        return $availableSlots;
+        // Passe la variable $schedules et $availableSlots à la vue "admin"
+        return view('admin', compact('schedules', 'availableSlots'));
     }
 
-    private function createSlot($date, $hour)
+    public function store(Request $request)
     {
-        $startDateTime = $date->copy()->hour($hour)->minute(0);
-        $endDateTime = $startDateTime->copy()->addHour();
+        $request->validate([
+            'start_date_time' => 'required|date|after:now',
+            'end_date_time' => 'required|date|after:start_date_time',
+        ]);
 
-        $isBooked = Appointments::where('date', $startDateTime->toDateString())
-            ->where('time', $startDateTime->toTimeString())
-            ->exists();
+        $start = $request->start_date_time;
+        $end = $request->end_date_time;
 
-        return [
-            'start' => $startDateTime->format('H:i'),
-            'end' => $endDateTime->format('H:i'),
-            'booked' => $isBooked
-        ];
+        // Vérifie si un rendez-vous existe déjà sur ce créneau
+        $conflict = Schedules::where(function ($query) use ($start, $end) {
+            $query->whereBetween('start_date_time', [$start, $end])
+                ->orWhereBetween('end_date_time', [$start, $end])
+                ->orWhere(function ($query) use ($start, $end) {
+                    $query->where('start_date_time', '<=', $start)
+                        ->where('end_date_time', '>=', $end);
+                });
+        })->exists();
+
+        if ($conflict) {
+            return redirect()->back()->with('error', 'Ce créneau est déjà réservé.');
+        }
+
+        // Enregistrement du nouveau rendez-vous
+        Schedules::create([
+            'start_date_time' => $start,
+            'end_date_time' => $end,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function schedules()
+    {
+        $schedules = Schedules::orderBy('start_date_time')->get();
+
+        // Générer les créneaux disponibles par date
+        $availableSlots = [];
+
+        foreach ($schedules as $schedule) {
+            $date = Carbon::parse($schedule->start_date_time)->format('Y-m-d');
+            $startTime = Carbon::parse($schedule->start_date_time)->format('H:i');
+            $endTime = Carbon::parse($schedule->end_date_time)->format('H:i');
+
+            if (!isset($availableSlots[$date])) {
+                $availableSlots[$date] = [];
+            }
+
+            $availableSlots[$date][] = [
+                'start' => $startTime,
+                'end' => $endTime,
+                'booked' => false,
+            ];
+        }
+
+        return view('schedules', compact('schedules', 'availableSlots'));
     }
 }
+

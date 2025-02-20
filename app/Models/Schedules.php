@@ -4,16 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 class Schedules extends Model
 {
     use HasFactory;
 
-    protected $table = 'schedules';
-
-    protected $fillable = [
-        'id',
-        'start_date_time',
-        'end_date_time',
-    ];
-
+    protected $fillable = ['start_date_time', 'end_date_time'];
+    public $timestamps = false;
 }
