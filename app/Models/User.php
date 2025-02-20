@@ -57,5 +57,4 @@ class User extends Authenticatable
     {
         return $this->role === 'admin'; // Vérifie le champ "role"
     }
-
 }

@@ -47,3 +47,9 @@ Route::post('/admin/schedules/store', [SchedulesController::class, 'store'])
 
 Route::get('appointment/view/{appointment}', [AdminController::class, 'show'])
     ->name('appointment.show');
+Route::delete('/admin/rdv/{id}', [AdminController::class, 'deleteAppointment'])->name('admin.rdv.delete');
+
+
+
+
+
