@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\AppointmentsController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,3 +44,6 @@ Route::post('/appointments/book', [AppointmentsController::class, 'bookAppointme
 
 Route::post('/admin/schedules/store', [SchedulesController::class, 'store'])
     ->name('admin.schedules.store');
+
+Route::get('appointment/view/{appointment}', [AdminController::class, 'show'])
+    ->name('appointment.show');

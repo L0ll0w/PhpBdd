@@ -9,7 +9,7 @@ class RoleController extends Controller
     public function admin()
     {
         if (!Auth::user()->isAdmin()) {
-            return redirect('/client'); // Empêche l'accès aux non-admins
+            return redirect('/client');
         }
         return view('admin');
     }
@@ -19,4 +19,3 @@ class RoleController extends Controller
         return view('client');
     }
 }
-
