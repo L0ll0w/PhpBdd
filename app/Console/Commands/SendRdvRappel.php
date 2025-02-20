@@ -29,13 +29,16 @@ class SendRdvRappel extends Command
      */
     public function handle()
     {
+        // Set on the next day's date
         $tomorrow = Carbon::tomorrow()->startOfDay();
         $rdvs = Appointments::whereDate('date', $tomorrow)->get();
 
+        // Each appointment is retrieved to send an e-mail
         foreach ($rdvs as $rdv) {
             Mail::to($rdv->email)->send(new RdvConfirmationMail($rdv));
         }
 
+        // Success message
         $this->info('Emails de rappel envoyés avec succès.');
     }
 }

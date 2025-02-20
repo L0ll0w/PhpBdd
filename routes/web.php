@@ -50,10 +50,6 @@ Route::get('appointment/view/{appointment}', [AdminController::class, 'show'])
 Route::delete('/admin/rdv/{id}', [AdminController::class, 'deleteAppointment'])->name('admin.rdv.delete');
 
 
-
-
-
-
 //Route::get('/testmail', function() {
 //    $message = 'Test mail';
 //

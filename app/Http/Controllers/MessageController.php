@@ -19,13 +19,13 @@ class MessageController extends Controller
     public function sendRdvConfirmationMail(Request $request)
     {
 
-        #1. Validation de la requête
+        // Validates request data, 'bail' allows validation to continue even if it fails.
         $this->validate($request, ['message' => 'bail|required']);
 
-        #2. Récupération des utilisateurs
+        // User recovery
         $users = User::all();
 
-        #3. Envoi du mail
+        // Send the email
         Mail::to($users)->bcc("test918237465@gmail.com")
             ->queue(new RdvConfirmationMail($request->all()));
 
