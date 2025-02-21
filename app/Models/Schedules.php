@@ -9,6 +9,6 @@ class Schedules extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['start_date_time', 'end_date_time'];
+    protected $fillable = ['start_date_time', 'end_date_time', 'booked'];
     public $timestamps = false;
 }
