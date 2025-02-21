@@ -18,6 +18,14 @@ class AppointmentsController extends Controller
         return view('appointments.index', compact('month', 'year', 'availableSlots'));
     }
 
+    public function index()
+    {
+        // Récupérer les créneaux et rendez-vous réservés
+        $appointments = Appointments::with('user')->get();
+
+        return view('admin', compact( 'appointments'));
+    }
+
     private function generateSchedule($month, $year)
     {
         $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;

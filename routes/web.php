@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
@@ -43,3 +44,10 @@ Route::post('/appointments/book', [AppointmentsController::class, 'bookAppointme
 
 Route::post('/admin/schedules/store', [SchedulesController::class, 'store'])
     ->name('admin.schedules.store');
+
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+Route::get('appointment/view/{appointment}', [AdminController::class, 'showAppointment'])
+    ->name('appointment.show');
+Route::delete('/admin/rdv/{id}', [AdminController::class, 'deleteAppointment'])->name('admin.rdv.delete');
+
